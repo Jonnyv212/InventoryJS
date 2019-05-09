@@ -19,6 +19,12 @@ export default class QueryData extends React.Component {
     });
   }
 
+  displayHistory() {
+    axios.get("/api/getHistory").then(response => {
+      this.setState({ data: response.data });
+    });
+  }
+
   render() {
     return (
       <ul>

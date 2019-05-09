@@ -19,7 +19,7 @@
 
 .header {
   color: white;
-  font-size: 200%;
+  font-size: 175%;
   font-family: "Segoe UI";
 }
 .logo {
@@ -28,7 +28,23 @@
 }
 
 .dbTable {
-  font-size: 200%;
+  font-size: 100%;
+  width: 75%;
+  border-bottom: 1px solid black;
+
+  font: black;
+  background-color: white;
+  padding: 10px;
+  text-align: center;
+}
+.dbColumns {
+  /* border-bottom: 4px solid black; */
+  background-color: #f3f3f3;
+}
+.dbRows {
+  border-bottom: 1px solid #ebedf0;
+  padding-bottom: 16px;
+  padding-top: 16px;
 }
 @keyframes App-logo-spin {
   from {

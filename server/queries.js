@@ -6,7 +6,7 @@ const fullInventory = () => {
   JOIN CATEGORY ON CATEGORY.CATEGORY_ID = EQUIPMENT.CATEGORY_ID 
   JOIN PROJECT ON PROJECT.PROJECT_ID = INVENTORY.PROJECT_ID
   WHERE INVENTORY.STATUS = '1'
-  ORDER BY TO_NUMBER(INVENTORY_ID)`;
+  ORDER BY TO_NUMBER(INVENTORY_ID) DESC`;
   return query;
 };
 
@@ -15,9 +15,16 @@ const allProjects = () => {
   return query;
 };
 
+const allHistory = () => {
+  const query =
+    "SELECT HISTORY.HISTORY_ID, EVENT.EVENT, HISTORY.HISTORY_DESCRIPTION, HISTORY.HISTORY_DATE FROM HISTORY JOIN EVENT ON EVENT.EVENT_ID = HISTORY.EVENT_ID ORDER BY TO_NUMBER(HISTORY_ID) DESC ";
+  return query;
+};
+
 const queryList = {
   q_inventory: fullInventory(),
-  q_projects: allProjects()
+  q_projects: allProjects(),
+  q_history: allHistory()
 };
 module.exports = queryList;
 
