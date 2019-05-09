@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Layout } from "antd";
 import { Table } from "antd";
+import { Icon } from "antd";
 import axios from "axios";
 
 const { Content } = Layout;
@@ -19,23 +20,36 @@ class ProjectsContent extends Component {
     return (
       <Content
         style={{
-          margin: "16px 16px",
-          padding: 24,
+          margin: "0px 1px",
+          padding: 0,
           background: "#fff",
           minHeight: 970,
           overflow: "auto"
         }}
       >
-        <form>
-          <fieldset className="form-group">
-            <input
-              type="text"
-              className="form-control form-control-lg"
-              placeholder="Search"
-              onChange={this.filterList}
-            />
-          </fieldset>
-        </form>
+        <div className="subheader">
+          <Icon
+            type="arrow-left"
+            style={{
+              fontSize: "35px",
+              color: "#08c",
+              margin: "10px 10px"
+            }}
+            onClick={() => {
+              console.log("test");
+            }}
+          />
+          <form>
+            <fieldset className="form-group">
+              <input
+                type="text"
+                className="form-control form-control-lg"
+                placeholder="Search"
+                onChange={this.filterList}
+              />
+            </fieldset>
+          </form>
+        </div>
 
         <Table
           dataSource={this.state.data}

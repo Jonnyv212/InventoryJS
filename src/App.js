@@ -12,7 +12,8 @@ import HistoryContent from "./History";
 const { Header, Sider } = Layout;
 class App extends Component {
   state = {
-    collapsed: false
+    collapsed: false,
+    headertext: "Pathology Informatics - Inventory"
     // data: [],
     // page: "api/getInventory"
   };
@@ -44,7 +45,7 @@ class App extends Component {
   };
 
   InventoryContent = () => {
-    // this.displayResults("api/getInventory/");
+    this.setState({ headertext: "Pathology Informatics - Inventory" });
     // const newInventory = ReactDOM.cloneNode(InventoryContent, {
 
     // })
@@ -52,48 +53,79 @@ class App extends Component {
   };
 
   ProjectsContent = () => {
+    this.setState({ headertext: "Pathology Informatics - Projects" });
     // this.displayResults("api/getProjects/");
     return <ProjectsContent />;
   };
 
   // ScanContent = () => {
+  // this.state.headertext = "Pathology Informatics - Barcode Scan";
   //   return <ScanContent dataparam={this.state.data} />;
   // };
 
   HistoryContent = () => {
+    this.setState({ headertext: "Pathology Informatics - History" });
     // this.displayResults("api/getHistory/");
     return <HistoryContent />;
   };
   render() {
     return (
       <Router>
-        <Layout>
+        <Layout style={{ height: "100%" }}>
           <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
             <div className="logo">
               <img src={logo} alt="logo" width="100%" />
             </div>
 
             <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-              <Menu.Item key="1">
+              <Menu.Item
+                key="1"
+                onClick={() => {
+                  return this.setState({
+                    headertext: "Pathology Informatics - Inventory"
+                  });
+                }}
+              >
                 <Link to="/inventory/">
                   <Icon type="user" />
                   <span>Inventory</span>
                 </Link>
               </Menu.Item>
 
-              <Menu.Item key="2">
+              <Menu.Item
+                key="2"
+                onClick={() => {
+                  return this.setState({
+                    headertext: "Pathology Informatics - Barcode Scan"
+                  });
+                }}
+              >
                 <Link to="/scan/">
                   <Icon type="video-camera" />
                   <span>Barcode Scan</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="3">
+              <Menu.Item
+                key="3"
+                onClick={() => {
+                  return this.setState({
+                    headertext: "Pathology Informatics - Projects"
+                  });
+                }}
+              >
                 <Link to="/projects/">
                   <Icon type="upload" />
                   <span>Projects</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="4">
+              <Menu.Item
+                key="4"
+                onClick={() => {
+                  return this.setState({
+                    headertext: "Pathology Informatics - History"
+                  });
+                }}
+              >
                 <Link to="/history/">
                   <Icon type="upload" />
                   <span>History</span>
@@ -115,9 +147,9 @@ class App extends Component {
                 type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
                 onClick={this.toggle}
               />{" "}
-              Pathology Informatics - Inventory
+              {/* Pathology Informatics - Inventory */}
+              {this.state.headertext}
             </Header>
-
             <Route path="/inventory/" component={InventoryContent} />
 
             {/* <Route path="/scan/" component={Users} /> */}
