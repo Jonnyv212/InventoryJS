@@ -3,6 +3,7 @@ import { Layout } from "antd";
 import { Table } from "antd";
 import { Icon } from "antd";
 import axios from "axios";
+import { Spin, Alert } from "antd";
 
 const { Content } = Layout;
 
@@ -11,14 +12,30 @@ class InventoryContent extends Component {
     data: [],
     search: ""
   };
+
+  spinner = () => {
+    return (
+      <Spin tip="Loading..." size={"large"}>
+        <Alert
+          message="Alert message title"
+          description="Further details about the context of this alert."
+          type="info"
+        />
+      </Spin>
+    );
+  };
   componentDidMount(data) {
-    axios.get("/inventory/api/getInventory/").then(response => {
-      this.setState({ data: response.data });
-    });
-    console.log(this.state.data);
+    setTimeout(() => {
+      axios.get("/inventory/api/getInventory/").then(response => {
+        this.setState({ data: response.data });
+      });
+    }, 500);
   }
 
   render() {
+    if (!this.state.data.length) {
+      return this.spinner();
+    }
     return (
       <Content
         style={{

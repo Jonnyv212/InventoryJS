@@ -3,17 +3,19 @@ import { Button, Icon, Layout, Menu } from "antd";
 import React, { Component } from "react";
 import "./App.css";
 import logo from "./logo.png";
-import axios from "axios";
+// import axios from "axios";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import InventoryContent from "./Inventory";
 import ProjectsContent from "./Projects";
 import HistoryContent from "./History";
+import { Spin, Alert } from "antd";
 
 const { Header, Sider } = Layout;
 class App extends Component {
   state = {
     collapsed: false,
-    headertext: "Pathology Informatics - Inventory"
+    headertext: "Pathology Informatics - Inventory",
+    loading: false
     // data: [],
     // page: "api/getInventory"
   };
@@ -37,6 +39,15 @@ class App extends Component {
   //   console.log("displaying");
   // }
 
+  // fetchdata = () => {
+  //   this.setState({ loading: true });
+
+  //   //Faking API call
+  //   setTimeout(() => {
+  //     this.setState({ loading: false });
+  //   }, 2000);
+  // };
+
   toggle = () => {
     this.setState({
       collapsed: !this.state.collapsed
@@ -44,30 +55,20 @@ class App extends Component {
     console.log("toggle");
   };
 
-  InventoryContent = () => {
-    this.setState({ headertext: "Pathology Informatics - Inventory" });
-    // const newInventory = ReactDOM.cloneNode(InventoryContent, {
-
-    // })
-    return <InventoryContent />;
+  getState = () => {
+    return new Promise((resolve, reject) => {
+      console.log("Loading...");
+      setTimeout(() => {
+        // this.setState({ loading: false });
+        if (this.state.loading == true) {
+          resolve(console.log("Loaded stuff: " + this.state.loading));
+        } else {
+          reject(console.log("Did not load anything: " + this.state.loading));
+        }
+      }, 2000);
+    });
   };
 
-  ProjectsContent = () => {
-    this.setState({ headertext: "Pathology Informatics - Projects" });
-    // this.displayResults("api/getProjects/");
-    return <ProjectsContent />;
-  };
-
-  // ScanContent = () => {
-  // this.state.headertext = "Pathology Informatics - Barcode Scan";
-  //   return <ScanContent dataparam={this.state.data} />;
-  // };
-
-  HistoryContent = () => {
-    this.setState({ headertext: "Pathology Informatics - History" });
-    // this.displayResults("api/getHistory/");
-    return <HistoryContent />;
-  };
   render() {
     return (
       <Router>
@@ -147,7 +148,6 @@ class App extends Component {
                 type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
                 onClick={this.toggle}
               />{" "}
-              {/* Pathology Informatics - Inventory */}
               {this.state.headertext}
             </Header>
             <Route path="/inventory/" component={InventoryContent} />
@@ -163,11 +163,3 @@ class App extends Component {
 }
 
 export default App;
-
-// const World = props => {
-//   if (props.who === "Number") {
-//     return <div>42! </div>;
-//   } else {
-//     return <h1>World</h1>;
-//   }
-// };
