@@ -8,7 +8,6 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import InventoryContent from "./Inventory";
 import ProjectsContent from "./Projects";
 import HistoryContent from "./History";
-import { Spin, Alert } from "antd";
 
 const { Header, Sider } = Layout;
 class App extends Component {
@@ -53,20 +52,6 @@ class App extends Component {
       collapsed: !this.state.collapsed
     });
     console.log("toggle");
-  };
-
-  getState = () => {
-    return new Promise((resolve, reject) => {
-      console.log("Loading...");
-      setTimeout(() => {
-        // this.setState({ loading: false });
-        if (this.state.loading == true) {
-          resolve(console.log("Loaded stuff: " + this.state.loading));
-        } else {
-          reject(console.log("Did not load anything: " + this.state.loading));
-        }
-      }, 2000);
-    });
   };
 
   render() {
