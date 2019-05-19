@@ -14,7 +14,7 @@ const fullInventory = () => {
   return query;
 };
 
-const fullInventorySearch = param => {
+const fullInventorySearch = (filter, search) => {
   const query =
     `SELECT INVENTORY.INVENTORY_ID, EQUIPMENT.EQUIPMENT_NAME, 
   CATEGORY.CATEGORY_NAME, PROJECT.PROJECT_NAME, INVENTORY.TERM_ID, INVENTORY.INVENTORY_DATE
@@ -22,9 +22,12 @@ const fullInventorySearch = param => {
   JOIN INVENTORY ON INVENTORY.EQUIPMENT_ID = EQUIPMENT.EQUIPMENT_ID 
   JOIN CATEGORY ON CATEGORY.CATEGORY_ID = EQUIPMENT.CATEGORY_ID 
   JOIN PROJECT ON PROJECT.PROJECT_ID = INVENTORY.PROJECT_ID
-  WHERE INVENTORY.STATUS = '1' AND REGEXP_LIKE( INVENTORY_ID , ` +
-    param +
-    `, 'i')
+  WHERE INVENTORY.STATUS = '1' 
+  AND REGEXP_LIKE( ` +
+    filter +
+    `, '` +
+    search +
+    `', 'i')
     ORDER BY TO_NUMBER(INVENTORY_ID) DESC`;
   return query;
 };

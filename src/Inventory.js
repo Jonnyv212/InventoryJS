@@ -5,6 +5,8 @@ import { Icon } from "antd";
 import axios from "axios";
 import { Spin, Alert } from "antd";
 import { Select } from "antd";
+import ColumnGroup from "antd/lib/table/ColumnGroup";
+import Column from "antd/lib/table/Column";
 
 const { Content } = Layout;
 
@@ -26,19 +28,13 @@ class InventoryContent extends Component {
   state = {
     data: [],
     search: "",
-    results: []
+    filter: ""
   };
 
   spinner = () => {
-    return (
-      <Spin tip="Loading..." size={"large"}>
-        <Alert
-          message="Alert message title"
-          description="Further details about the context of this alert."
-          type="info"
-        />
-      </Spin>
-    );
+    if (!this.state.data.length) {
+      return <Spin tip="Loading..." size={"large"} />;
+    }
   };
   componentDidMount(data) {
     setTimeout(() => {
@@ -55,19 +51,26 @@ class InventoryContent extends Component {
       },
       () => {
         return new Promise((resolve, reject) => {
-          const num = this.state.search.match(/[0-9]/);
+          // const num = this.state.search.match(/[0-9]/);
+          const searchInput = this.state.search;
+          const filterInput = this.state.filter;
 
-          if (num == null) {
+          if (searchInput == null || filterInput == null) {
             axios.get("/inventory/api/getInventory/").then(response => {
               this.setState({ data: response.data });
             });
             console.log("Num is null");
           } else {
             axios
-              .get("/inventory/api/getInventorySearch/" + num.input)
+              .get(
+                "/inventory/api/getInventorySearch/" +
+                  filterInput +
+                  "/" +
+                  searchInput
+              )
               .then(response => {
                 this.setState({ data: response.data });
-                console.log(num.input);
+                console.log(searchInput + " " + filterInput);
               });
           }
         });
@@ -91,15 +94,15 @@ class InventoryContent extends Component {
 
   // this.setState({ results: filteredData });
 
-  onChange(value) {
-    console.log(`selected ${value}`);
-  }
+  onChange = value => {
+    this.setState({ filter: value }, () => {
+      console.log(this.state.filter);
+    });
+  };
 
   render() {
     // if (!this.state.data.length) {
-    //   return setTimeout(() => {
-    //     this.spinner();
-    //   }, 500);
+    //   return this.spinner();
     // }
 
     return (
@@ -141,10 +144,16 @@ class InventoryContent extends Component {
             onChange={this.updateSearch.bind(this)}
           />
         </form>
-        {/* <div>
-          <li>{this.state.results}</li>
-        </div> */}
+
         <Table
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: event => {
+                console.log("Clicked this " + record.INVENTORY_ID);
+              }, // click row
+              onDoubleClick: event => {} // double click row
+            };
+          }}
           dataSource={this.state.data}
           columns={[
             {
@@ -183,6 +192,7 @@ class InventoryContent extends Component {
             }
           ]}
         />
+        {/* <div className="example">{this.spinner()}</div> */}
         {/* <Search /> */}
         {/* {this.state.data.length ? (
           <table className="dbTable">

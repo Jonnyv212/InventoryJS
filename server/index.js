@@ -1,13 +1,8 @@
-// import fullInventorySearch from "./queries.js";
-
 const db = require("./DBconnection");
 const queries = require("./queries");
 const express = require("express");
 const app = express();
-//const router = express.Router();
 const port = 3001;
-
-// const searching = require("../src/Inventory");
 
 app.listen(port, () => {
   console.log("Listening to port: " + port);
@@ -19,21 +14,23 @@ app.get("/inventory/api/getInventory/", (req, res) => {
   });
 });
 
-app.get("/inventory/api/getInventorySearch/:id", (req, res) => {
-  db(queries.q_inventorySearch(req.params.id)).then(dbResults => {
-    res.send(dbResults);
-  });
+app.get("/inventory/api/getInventorySearch/:filter/:search", (req, res) => {
+  db(queries.q_inventorySearch(req.params.filter, req.params.search)).then(
+    dbResults => {
+      res.send(dbResults);
+    }
+  );
 });
 
 app.get("/projects/api/getProjects/", (req, res) => {
-  db(queries.q_projects).then(dbResults => {
+  db(queries.q_projects()).then(dbResults => {
     res.send(dbResults);
     //console.log(queries());
   });
 });
 
 app.get("/history/api/getHistory/", (req, res) => {
-  db(queries.q_history).then(dbResults => {
+  db(queries.q_history()).then(dbResults => {
     res.send(dbResults);
     //console.log(queries());
   });
