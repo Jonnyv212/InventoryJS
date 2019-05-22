@@ -1,15 +1,14 @@
-//import { stringify } from "querystring";
-import { Button, Icon, Layout, Menu } from "antd";
+import { Icon, Layout, Menu } from "antd";
 import React, { Component } from "react";
 import "./App.css";
 import logo from "./logo.png";
-// import axios from "axios";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import InventoryContent from "./Inventory";
 import ProjectsContent from "./Projects";
 import HistoryContent from "./History";
 
 const { Header, Sider } = Layout;
+
 class App extends Component {
   state = {
     collapsed: false,
@@ -57,8 +56,13 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <Layout style={{ height: "100%" }}>
-          <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+        <Layout className="layout">
+          <Sider
+            style={{ width: "100%" }}
+            trigger={null}
+            collapsible
+            collapsed={this.state.collapsed}
+          >
             <div className="logo">
               <img src={logo} alt="logo" width="100%" />
             </div>
@@ -135,9 +139,8 @@ class App extends Component {
               />{" "}
               {this.state.headertext}
             </Header>
-            <Route path="/inventory/" component={InventoryContent} />
 
-            {/* <Route path="/scan/" component={Users} /> */}
+            <Route path="/inventory/" component={InventoryContent} />
             <Route path="/projects/" component={ProjectsContent} />
             <Route path="/history/" component={HistoryContent} />
           </Layout>

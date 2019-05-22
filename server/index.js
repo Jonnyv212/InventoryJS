@@ -7,6 +7,7 @@ const port = 3001;
 app.listen(port, () => {
   console.log("Listening to port: " + port);
 });
+
 //Gets results from query in db.js as Objects (oracledb.outFormat = oracledb.OBJECT)
 app.get("/inventory/api/getInventory/", (req, res) => {
   db(queries.q_inventory()).then(dbResults => {
@@ -14,6 +15,7 @@ app.get("/inventory/api/getInventory/", (req, res) => {
   });
 });
 
+//Server-side filtered data based on parameters /:column/:data sent by client.
 app.get("/inventory/api/getInventorySearch/:filter/:search", (req, res) => {
   db(queries.q_inventorySearch(req.params.filter, req.params.search)).then(
     dbResults => {

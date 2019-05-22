@@ -46,19 +46,11 @@
   background-color: #f3f3f3;
 }
 .dbRows {
-  border-bottom: 1px solid #ebedf0;
-  padding-bottom: 16px;
-  padding-top: 16px;
+  text-align: left;
+  border: solid;
+  width: 50%;
 }
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+/* 
 .example {
   text-align: center;
   background: rgba(0, 0, 0, 0.05);
@@ -66,4 +58,8 @@
   margin-bottom: 20px;
   padding: 30px 50px;
   margin: 20px 0;
+} */
+
+.layout {
+  min-height: 100vh;
 }

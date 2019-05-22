@@ -1,238 +1,235 @@
 import React, { Component } from "react";
-import { Layout } from "antd";
-import { Table } from "antd";
-import { Icon } from "antd";
+import { Layout, Table, Spin, Select, Input, Button } from "antd";
 import axios from "axios";
-import { Spin, Alert } from "antd";
-import { Select } from "antd";
-import ColumnGroup from "antd/lib/table/ColumnGroup";
-import Column from "antd/lib/table/Column";
 
+const Search = Input.Search;
 const { Content } = Layout;
-
 const Option = Select.Option;
-
-// function onBlur() {
-//   console.log("Blur");
-// }
-
-// function onFocus() {
-//   console.log("focus");
-// }
-
-// function onSearch(val) {
-//   console.log("search:", val);
-// }
 
 class InventoryContent extends Component {
   state = {
-    data: [],
-    search: "",
-    filter: ""
+    data: [], //Contains an array of objects in JSON
+    search: "", //Contains the searched input as a state to use as a parameter in the query
+    filter: "", //Contains the currently selected filter option as a state to use as a parameter in the query
+    searchDisabled: true, //Enable the search bar if false. Default: true
+    loadingEnabled: true //Initiate a loadingEnabled state that renders the spinner loading animation if false. Default: true
   };
 
-  spinner = () => {
-    if (!this.state.data.length) {
-      return <Spin tip="Loading..." size={"large"} />;
-    }
-  };
+  //Initial function called.
   componentDidMount(data) {
     setTimeout(() => {
-      axios.get("/inventory/api/getInventory/").then(response => {
-        this.setState({ data: response.data });
-      });
-    }, 500);
+      this.getFullInventory();
+    }, 1000);
   }
 
-  updateSearch(event) {
+  //Get an array of objects containing data and assign it to this.state.data
+  getFullInventory() {
+    console.log("Searching for data...");
+    axios
+      .get("/inventory/api/getInventory/") //Data pulled from index.js
+      .then(response => {
+        if (this.state.data) {
+          this.setState({
+            data: response.data,
+            loadingEnabled: false,
+            searchDisabled: true
+          }); //data state set, Loading disabled, Search disabled.
+          console.log("Data found.");
+        }
+      })
+      .catch(message => {
+        //No data is found.
+        setTimeout(() => {
+          //Set a timeout for five seconds that will disable loading and search.
+          this.setState(
+            {
+              loadingEnabled: false,
+              searchDisabled: true
+            },
+            console.log("search state: " + this.state.searchDisabled)
+          );
+          console.log(" No data found. " + message);
+        }, 5000);
+      });
+  }
+
+  querySearch(value) {
     this.setState(
       {
-        search: event.target.value.substr(0, 20)
+        loadingEnabled: true, //Enable loading to start the spinner animation.
+        search: value //Set search state to parameter value
       },
       () => {
-        return new Promise((resolve, reject) => {
-          // const num = this.state.search.match(/[0-9]/);
-          const searchInput = this.state.search;
-          const filterInput = this.state.filter;
-
-          if (searchInput == null || filterInput == null) {
-            axios.get("/inventory/api/getInventory/").then(response => {
-              this.setState({ data: response.data });
+        //inventory/api/getInventorySearch/:filter/:search/ the Filter parameter pertains to column.
+        //The Search parameter pertains to data within that column.
+        axios
+          .get(
+            "/inventory/api/getInventorySearch/" +
+              this.state.filter +
+              "/" +
+              this.state.search
+          )
+          .then(response => {
+            this.setState({
+              data: response.data,
+              loadingEnabled: false,
+              searchDisabled: true
             });
-            console.log("Num is null");
-          } else {
-            axios
-              .get(
-                "/inventory/api/getInventorySearch/" +
-                  filterInput +
-                  "/" +
-                  searchInput
-              )
-              .then(response => {
-                this.setState({ data: response.data });
-                console.log(searchInput + " " + filterInput);
-              });
-          }
-        });
+          })
+          .catch(message => {
+            setTimeout(() => {
+              this.setState(
+                {
+                  loadingEnabled: false,
+                  searchDisabled: true
+                },
+                console.log("No data found. " + message)
+              );
+            }, 5000);
+          });
       }
     );
   }
-  // console.log(this.state.search + " - " + this.state.results)
-  // this.setState({ search: event.target.value.substr(0, 20) }, () => {
-  //   console.log("state search: " + this.state.search);
-  //   this.setState(
-  //     {
-  //       results: this.state.data.filter(fData => {
-  //         return fData.INVENTORY_ID.indexOf(this.state.search) !== -1;
-  //       })
-  //     },
-  //     () => {
-  //       console.log(this.state.results);
-  //     }
-  //   );
-  // });
+  // clearInput = () => {
+  //   this.getFullInventory();
+  //   this.setState({ search: null });
+  // };
 
-  // this.setState({ results: filteredData });
-
-  onChange = value => {
-    this.setState({ filter: value }, () => {
-      console.log(this.state.filter);
+  //Function activated when clicking an item on its dropdown menu.
+  onFilterChange = value => {
+    this.setState({
+      searchDisabled: false,
+      filter: value
     });
   };
 
+  //Loading spinner
+  spinner = () => {
+    return (
+      <Spin
+        style={{ fontSize: 32, position: "fixed", top: "50%", left: "50%" }}
+        tip="Loading..."
+        size={"large"}
+      />
+    );
+  };
+
   render() {
-    // if (!this.state.data.length) {
-    //   return this.spinner();
-    // }
+    //If the loading state is true then render the loading spinner
+    if (this.state.loadingEnabled == true) {
+      return this.spinner();
+    }
 
     return (
-      <Content
-        style={{
-          margin: "0px 1px",
-          padding: 0,
-          background: "#fff",
-          minHeight: 970,
-          overflow: "auto"
-        }}
-      >
-        <Select
-          showSearch
-          style={{ width: 200 }}
-          placeholder="Select a filter"
-          optionFilterProp="children"
-          onChange={this.onChange}
-          // onFocus={onFocus}
-          // onBlur={onBlur}
-          // onSearch={onSearch}
-          filterOption={(input, option) =>
-            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >=
-            0
-          }
-        >
-          <Option value="INVENTORY_ID">Inventory ID</Option>
-          <Option value="EQUIPMENT_NAME">Equipment Name</Option>
-          <Option value="CATEGORY_NAME">Category Name</Option>
-          <Option value="PROJECT_NAME">Project Name</Option>
-          <Option value="TERM_ID">Term ID</Option>
-          <Option value="INVENTORY_DATE">Date</Option>
-        </Select>
-
-        <form>
-          <input
-            placeholder="Search for..."
-            value={this.state.search}
-            onChange={this.updateSearch.bind(this)}
-          />
-        </form>
-
-        <Table
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: event => {
-                console.log("Clicked this " + record.INVENTORY_ID);
-              }, // click row
-              onDoubleClick: event => {} // double click row
-            };
-          }}
-          dataSource={this.state.data}
-          columns={[
-            {
-              title: "Inventory ID",
-              dataIndex: "INVENTORY_ID"
-              // render: value => (
-              //   <button
-              //     onClick={() => {
-              //       alert(value + 1);
-              //     }}
-              //     data-src={value}
-              //   >
-              //     {value}
-              //   </button>
-              // )
-            },
-            {
-              title: "Equipment Name",
-              dataIndex: "EQUIPMENT_NAME"
-            },
-            {
-              title: "Category Name",
-              dataIndex: "CATEGORY_NAME"
-            },
-            {
-              title: "Project Name",
-              dataIndex: "PROJECT_NAME"
-            },
-            {
-              title: "Term ID",
-              dataIndex: "TERM_ID"
-            },
-            {
-              title: "Date",
-              dataIndex: "INVENTORY_DATE"
+      <React.Fragment>
+        <div className="dataMenus">
+          <Select
+            showSearch
+            style={{ width: 200 }}
+            size="large"
+            placeholder={"Select a filter"}
+            optionFilterProp="children"
+            onChange={this.onFilterChange}
+            // onFocus={onFocus}
+            // onBlur={onBlur}
+            // onSearch={onSearch}
+            filterOption={(input, option) =>
+              option.props.children
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) >= 0
             }
-          ]}
-        />
-        {/* <div className="example">{this.spinner()}</div> */}
-        {/* <Search /> */}
-        {/* {this.state.data.length ? (
-          <table className="dbTable">
-            <thead className="dbColumns">
-              <tr>
-                {Object.keys(this.state.data[0]).map(id => {
-                  return (
-                    <th
-                      className="dbRows"
-                      onClick={() => console.log("Clicked a column " + id)}
-                    >
-                      {id}
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.data.map(items => {
-                return (
-                  <tr>
-                    {Object.keys(items).map(id => {
-                      return (
-                        <td
-                          className="dbRows"
-                          onClick={() =>
-                            console.log("Clicked a row " + items[id])
-                          }
-                        >
-                          {items[id]}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : null} */}
-      </Content>
+          >
+            <Option value="INVENTORY_ID">Inventory ID</Option>
+            <Option value="EQUIPMENT_NAME">Equipment Name</Option>
+            <Option value="CATEGORY_NAME">Category Name</Option>
+            <Option value="PROJECT_NAME">Project Name</Option>
+            <Option value="TERM_ID">Term ID</Option>
+            <Option value="INVENTORY_DATE">Date</Option>
+          </Select>
+
+          <Search
+            id="myInput"
+            disabled={this.state.searchDisabled}
+            style={{ width: 350 }}
+            placeholder={this.state.search}
+            enterButton="Search"
+            size="large"
+            onSearch={value => {
+              this.querySearch(value);
+            }}
+          />
+
+          <Button
+            style={{ width: 80, height: 40 }}
+            size="large"
+            type="default"
+            onClick={null}
+          >
+            Clear
+          </Button>
+        </div>
+
+        <Content
+          style={{
+            margin: "0px 1px",
+            padding: 10,
+            background: "#fff"
+            // minHeight: 970,
+            // overflow: "auto"
+          }}
+        >
+          <Table
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: event => {
+                  console.log("Clicked this " + record.INVENTORY_ID);
+                }, // click row
+                onDoubleClick: event => {} // double click row
+              };
+            }}
+            dataSource={this.state.data}
+            columns={[
+              {
+                title: "Inventory ID",
+                dataIndex: "INVENTORY_ID"
+              },
+              {
+                title: "Equipment Name",
+                dataIndex: "EQUIPMENT_NAME"
+              },
+              {
+                title: "Category Name",
+                dataIndex: "CATEGORY_NAME"
+              },
+              {
+                title: "Project Name",
+                dataIndex: "PROJECT_NAME"
+              },
+              {
+                title: "Term ID",
+                dataIndex: "TERM_ID"
+              },
+              {
+                title: "Date",
+                dataIndex: "INVENTORY_DATE"
+              },
+              {
+                render: value => (
+                  <Button
+                    style={{ width: 80, height: 40 }}
+                    size="large"
+                    type="primary"
+                    onClick={null}
+                    data-src={value}
+                  >
+                    Edit
+                  </Button>
+                )
+              }
+            ]}
+          />
+        </Content>
+      </React.Fragment>
     );
   }
 }

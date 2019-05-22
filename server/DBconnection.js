@@ -43,15 +43,6 @@ let QueryExecute = query => {
   });
 };
 
-// Note: connections should always be released when not needed
-// function doRelease(connection) {
-//   connection.close(function(err) {
-//     if (err) {
-//       console.error(err.message);
-//     }
-//   });
-// }
-
 let doRelease = connection =>
   connection.close(err => {
     if (err) console.error(err.message);

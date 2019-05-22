@@ -69,37 +69,39 @@ class ProjectsContent extends Component {
           </form>
         </div>
 
-        <Table
-          dataSource={this.state.data}
-          columns={[
-            {
-              title: "Project ID",
-              dataIndex: "PROJECT_ID",
-              render: value => (
-                <button
-                  onClick={() => {
-                    alert(value + 1);
-                  }}
-                  data-src={value}
-                >
-                  {value}
-                </button>
-              )
-            },
-            {
-              title: "Project Name",
-              dataIndex: "PROJECT_NAME"
-            },
-            {
-              title: "Ticket Number",
-              dataIndex: "TICKET_NO"
-            },
-            {
-              title: "Description",
-              dataIndex: "PROJECT_DESCRIPTION"
-            }
-          ]}
-        />
+        <div className="dbRows">
+          <Table
+            dataSource={this.state.data}
+            columns={[
+              {
+                title: "Project ID",
+                dataIndex: "PROJECT_ID",
+                render: value => (
+                  <button
+                    onClick={() => {
+                      alert(value + 1);
+                    }}
+                    data-src={value}
+                  >
+                    {value}
+                  </button>
+                )
+              },
+              {
+                title: "Project Name",
+                dataIndex: "PROJECT_NAME"
+              },
+              {
+                title: "Ticket Number",
+                dataIndex: "TICKET_NO"
+              },
+              {
+                title: "Description",
+                dataIndex: "PROJECT_DESCRIPTION"
+              }
+            ]}
+          />
+        </div>
       </Content>
     );
   }
