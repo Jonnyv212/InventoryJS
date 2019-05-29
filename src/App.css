@@ -50,16 +50,41 @@
   border: solid;
   width: 50%;
 }
-/* 
-.example {
-  text-align: center;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-  margin-bottom: 20px;
-  padding: 30px 50px;
-  margin: 20px 0;
-} */
 
 .layout {
   min-height: 100vh;
+}
+
+.login-form {
+  max-width: 300px;
+  display: hidden;
+  float: left;
+  /* border: solid; */
+}
+
+.dataMenus {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 20px 0;
+}
+
+.formtest {
+  display: inline-block;
+  /* float: left; */
+  /* display: hidden; */
+  /* border: solid; */
+  margin-right: 15px;
+  /* width: "100%"; */
+  /* width: 20%; */
+}
+
+.editContent {
+  border: solid;
+  display: inline-block;
+  padding-top: 15px;
 }

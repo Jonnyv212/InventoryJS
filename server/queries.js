@@ -14,6 +14,21 @@ const fullInventory = () => {
   return query;
 };
 
+const getInventoryID = ID => {
+  const query =
+    `SELECT INVENTORY.INVENTORY_ID, EQUIPMENT.EQUIPMENT_NAME, 
+  CATEGORY.CATEGORY_NAME, PROJECT.PROJECT_NAME, INVENTORY.TERM_ID, INVENTORY.INVENTORY_DATE
+  FROM EQUIPMENT 
+  JOIN INVENTORY ON INVENTORY.EQUIPMENT_ID = EQUIPMENT.EQUIPMENT_ID 
+  JOIN CATEGORY ON CATEGORY.CATEGORY_ID = EQUIPMENT.CATEGORY_ID 
+  JOIN PROJECT ON PROJECT.PROJECT_ID = INVENTORY.PROJECT_ID
+  WHERE INVENTORY.STATUS = '1' AND INVENTORY_ID = ` +
+    ID +
+    `
+  ORDER BY TO_NUMBER(INVENTORY_ID) DESC`;
+  return query;
+};
+
 const fullInventorySearch = (filter, search) => {
   const query =
     `SELECT INVENTORY.INVENTORY_ID, EQUIPMENT.EQUIPMENT_NAME, 
@@ -46,6 +61,7 @@ allHistory = () => {
 const queryList = {
   q_inventory: fullInventory,
   q_inventorySearch: fullInventorySearch,
+  q_inventoryID: getInventoryID,
   q_projects: allProjects,
   q_history: allHistory
 };

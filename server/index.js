@@ -15,7 +15,7 @@ app.get("/inventory/api/getInventory/", (req, res) => {
   });
 });
 
-//Server-side filtered data based on parameters /:column/:data sent by client.
+//Server-side filtered data based on parameters /:column/:data sent by client request.
 app.get("/inventory/api/getInventorySearch/:filter/:search", (req, res) => {
   db(queries.q_inventorySearch(req.params.filter, req.params.search)).then(
     dbResults => {
@@ -24,6 +24,11 @@ app.get("/inventory/api/getInventorySearch/:filter/:search", (req, res) => {
   );
 });
 
+app.get("/inventory/api/getInventoryID/:id", (req, res) => {
+  db(queries.q_inventoryID(req.params.id)).then(dbResults => {
+    res.send(dbResults);
+  });
+});
 app.get("/projects/api/getProjects/", (req, res) => {
   db(queries.q_projects()).then(dbResults => {
     res.send(dbResults);

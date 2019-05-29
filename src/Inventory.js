@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Table, Spin, Select, Input, Button } from "antd";
+import { Layout, Table, Spin, Select, Input, Button, Form, Icon } from "antd";
 import axios from "axios";
 
 const Search = Input.Search;
@@ -12,7 +12,9 @@ class InventoryContent extends Component {
     search: "", //Contains the searched input as a state to use as a parameter in the query
     filter: "", //Contains the currently selected filter option as a state to use as a parameter in the query
     searchDisabled: true, //Enable the search bar if false. Default: true
-    loadingEnabled: true //Initiate a loadingEnabled state that renders the spinner loading animation if false. Default: true
+    loadingEnabled: true, //Initiate a loadingEnabled state that renders the spinner loading animation if false. Default: true
+    editSelection: false, //State that determines whether to display an edit page for a row within Inventory.
+    editData: []
   };
 
   //Initial function called.
@@ -22,6 +24,18 @@ class InventoryContent extends Component {
     }, 1000);
   }
 
+  getEditIDInfo() {
+    axios
+      .get("/inventory/api/getInventoryID/" + this.state.editData)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(message => {
+        setTimeout(() => {
+          console.log("No data found. " + message);
+        }, 5000);
+      });
+  }
   //Get an array of objects containing data and assign it to this.state.data
   getFullInventory() {
     console.log("Searching for data...");
@@ -114,25 +128,132 @@ class InventoryContent extends Component {
     );
   };
 
+  editItem = () => {
+    return (
+      <div className="dataMenus">
+        {this.backArrow()}
+
+        <Content>
+          <div className="editContent">
+            <Form onSubmit={null}>
+              <div className="formtest">
+                <Form.Item>
+                  INVENTORY ID
+                  <Input
+                    disabled={true}
+                    prefix={
+                      <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                    }
+                    placeholder="INVENTORY ID goes here"
+                    value={this.state.editData[0]}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  EQUIPMENT
+                  <Input
+                    prefix={
+                      <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                    }
+                    placeholder="Equipment name goes here"
+                    value={this.state.editData[1]}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  CATEGORY
+                  <Input
+                    prefix={
+                      <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                    }
+                    placeholder="Category name goes here"
+                    value={this.state.editData[2]}
+                  />
+                </Form.Item>
+              </div>
+              <div className="formtest">
+                <Form.Item>
+                  PROJECT
+                  <Input
+                    prefix={
+                      <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                    }
+                    placeholder="Project name goes here"
+                    value={this.state.editData[3]}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  TERM ID
+                  <Input
+                    prefix={
+                      <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                    }
+                    placeholder="Term ID goes here"
+                    value={this.state.editData[4]}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  DATE
+                  <Input
+                    prefix={
+                      <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                    }
+                    placeholder="Date goes here"
+                    value={this.state.editData[5]}
+                  />
+                </Form.Item>
+              </div>
+            </Form>
+            <Button
+              style={{ width: 100, height: 40 }}
+              size="large"
+              type="primary"
+            >
+              Save
+            </Button>
+          </div>
+        </Content>
+      </div>
+    );
+  };
+  backArrow = () => {
+    return (
+      <Button
+        icon="arrow-left"
+        disabled={!this.state.editSelection}
+        size={"large"}
+        style={{
+          // fontSize: "15px",
+          color: "#08c",
+          paddingRight: "24px",
+          paddingLeft: "24px",
+          marginRight: "32px"
+        }}
+        onClick={() => {
+          this.setState({ editSelection: false });
+          console.log("test " + this.state.editSelection);
+        }}
+      />
+    );
+  };
   render() {
     //If the loading state is true then render the loading spinner
     if (this.state.loadingEnabled == true) {
       return this.spinner();
     }
 
+    if (this.state.editSelection) {
+      return this.editItem();
+    }
     return (
       <React.Fragment>
         <div className="dataMenus">
+          {this.backArrow()}
           <Select
             showSearch
-            style={{ width: 200 }}
+            style={{ width: 200, marginRight: "32px", color }}
             size="large"
             placeholder={"Select a filter"}
             optionFilterProp="children"
             onChange={this.onFilterChange}
-            // onFocus={onFocus}
-            // onBlur={onBlur}
-            // onSearch={onSearch}
             filterOption={(input, option) =>
               option.props.children
                 .toLowerCase()
@@ -168,7 +289,7 @@ class InventoryContent extends Component {
             Clear
           </Button>
         </div>
-
+        <hr style={{ color: "rgba(0,0,0,.25)" }} />
         <Content
           style={{
             margin: "0px 1px",
@@ -179,14 +300,13 @@ class InventoryContent extends Component {
           }}
         >
           <Table
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: event => {
-                  console.log("Clicked this " + record.INVENTORY_ID);
-                }, // click row
-                onDoubleClick: event => {} // double click row
-              };
-            }}
+            // onRow={(record, rowIndex) => {
+            //   return {
+            //     onClick: event => {
+            //       console.log("Clicked this " + record.INVENTORY_ID);
+            //     }
+            //   };
+            // }}
             dataSource={this.state.data}
             columns={[
               {
@@ -219,8 +339,31 @@ class InventoryContent extends Component {
                     style={{ width: 80, height: 40 }}
                     size="large"
                     type="primary"
-                    onClick={null}
-                    data-src={value}
+                    onClick={() => {
+                      const array = [
+                        value.INVENTORY_ID,
+                        value.EQUIPMENT_NAME,
+                        value.CATEGORY_NAME,
+                        value.PROJECT_NAME,
+                        value.TERM_ID,
+                        value.INVENTORY_DATE
+                      ];
+                      // var arrayLength = array.length;
+                      // for (var i = 0; i < arrayLength; i++) {
+                      //   this.state.editData.push(array[i]);
+                      //   console.log(this.state.editData);
+                      // }
+                      this.setState(
+                        {
+                          editSelection: true,
+                          editData: array
+                        },
+                        () => {
+                          console.log("call" + this.state.editData[0]);
+                        }
+                      );
+                    }}
+                    // data-src={value}
                   >
                     Edit
                   </Button>

@@ -139,10 +139,11 @@ class App extends Component {
               />{" "}
               {this.state.headertext}
             </Header>
-
-            <Route path="/inventory/" component={InventoryContent} />
-            <Route path="/projects/" component={ProjectsContent} />
-            <Route path="/history/" component={HistoryContent} />
+            <div style={{ margin: "12px" }}>
+              <Route path="/inventory/" component={InventoryContent} />
+              <Route path="/projects/" component={ProjectsContent} />
+              <Route path="/history/" component={HistoryContent} />
+            </div>
           </Layout>
         </Layout>
       </Router>
