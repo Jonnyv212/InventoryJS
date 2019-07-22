@@ -9,12 +9,28 @@ const { Content } = Layout;
 
 class ProjectsContent extends Component {
   state = {
-    data: []
+    data: [],
+
+    columns: [
+      {
+        title: "Name",
+        dataIndex: "name"
+      }
+    ],
+
+    data2: [
+      {
+        key: "1",
+        name: "John Brown",
+        age: 32,
+        address: "New York No. 1 Lake Park"
+      }
+    ]
   };
 
-  componentDidMount(data) {
+  componentDidMount() {
     setTimeout(() => {
-      axios.get("/projects/api/getProjects/").then(response => {
+      axios.get("/api/getProjects/").then(response => {
         this.setState({ data: response.data });
       });
     }, 500);
@@ -31,7 +47,9 @@ class ProjectsContent extends Component {
       </Spin>
     );
   };
+
   render() {
+    console.log(this.state.data);
     if (!this.state.data.length) {
       return this.spinner();
     }
@@ -75,7 +93,7 @@ class ProjectsContent extends Component {
             columns={[
               {
                 title: "Project ID",
-                dataIndex: "PROJECT_ID",
+                dataIndex: "project_id",
                 render: value => (
                   <button
                     onClick={() => {
@@ -89,15 +107,15 @@ class ProjectsContent extends Component {
               },
               {
                 title: "Project Name",
-                dataIndex: "PROJECT_NAME"
+                dataIndex: "project_name"
               },
               {
                 title: "Ticket Number",
-                dataIndex: "TICKET_NO"
+                dataIndex: "ticket_no"
               },
               {
                 title: "Description",
-                dataIndex: "PROJECT_DESCRIPTION"
+                dataIndex: "project_description"
               }
             ]}
           />

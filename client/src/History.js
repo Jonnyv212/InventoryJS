@@ -12,9 +12,9 @@ class HistoryContent extends Component {
     data: []
   };
 
-  componentDidMount(data) {
+  componentDidMount() {
     setTimeout(() => {
-      axios.get("/history/api/getHistory/").then(response => {
+      axios.get("/api/getHistory/").then(response => {
         this.setState({ data: response.data });
       });
     }, 500);
@@ -74,7 +74,7 @@ class HistoryContent extends Component {
           columns={[
             {
               title: "History ID",
-              dataIndex: "HISTORY_ID",
+              dataIndex: "history_id",
               render: value => (
                 <button
                   onClick={() => {
@@ -88,15 +88,15 @@ class HistoryContent extends Component {
             },
             {
               title: "Event",
-              dataIndex: "EVENT"
+              dataIndex: "event"
             },
             {
               title: "Description",
-              dataIndex: "HISTORY_DESCRIPTION"
+              dataIndex: "history_description"
             },
             {
               title: "Date",
-              dataIndex: "HISTORY_DATE"
+              dataIndex: "history_date  "
             }
           ]}
         />

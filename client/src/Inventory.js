@@ -40,7 +40,7 @@ class InventoryContent extends Component {
   getFullInventory() {
     console.log("Searching for data...");
     axios
-      .get("/inventory/api/getInventory/") //Data pulled from index.js
+      .get("/api/getInventory/") //Data pulled from index.js
       .then(response => {
         if (this.state.data) {
           this.setState({
@@ -249,7 +249,7 @@ class InventoryContent extends Component {
           {this.backArrow()}
           <Select
             showSearch
-            style={{ width: 200, marginRight: "32px", color }}
+            style={{ width: 200, marginRight: "32px" }}
             size="large"
             placeholder={"Select a filter"}
             optionFilterProp="children"
