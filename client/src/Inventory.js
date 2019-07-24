@@ -26,7 +26,7 @@ class InventoryContent extends Component {
 
   getEditIDInfo() {
     axios
-      .get("/inventory/api/getInventoryID/" + this.state.editData)
+      .get("/api/getInventoryID/" + this.state.editData)
       .then(response => {
         console.log(response);
       })
@@ -78,7 +78,7 @@ class InventoryContent extends Component {
         //The Search parameter pertains to data within that column.
         axios
           .get(
-            "/inventory/api/getInventorySearch/" +
+            "/api/getInventorySearch/" +
               this.state.filter +
               "/" +
               this.state.search
@@ -311,27 +311,27 @@ class InventoryContent extends Component {
             columns={[
               {
                 title: "Inventory ID",
-                dataIndex: "INVENTORY_ID"
+                dataIndex: "inventory_id"
               },
               {
                 title: "Equipment Name",
-                dataIndex: "EQUIPMENT_NAME"
+                dataIndex: "equipment_name"
               },
               {
                 title: "Category Name",
-                dataIndex: "CATEGORY_NAME"
+                dataIndex: "category_name"
               },
               {
                 title: "Project Name",
-                dataIndex: "PROJECT_NAME"
+                dataIndex: "project_name"
               },
               {
                 title: "Term ID",
-                dataIndex: "TERM_ID"
+                dataIndex: "term_id"
               },
               {
                 title: "Date",
-                dataIndex: "INVENTORY_DATE"
+                dataIndex: "date"
               },
               {
                 render: value => (
