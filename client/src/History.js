@@ -87,16 +87,16 @@ class HistoryContent extends Component {
               )
             },
             {
+              title: "Equipment",
+              dataIndex: "equipment_name"
+            },
+            {
               title: "Event",
               dataIndex: "event"
             },
             {
-              title: "Description",
-              dataIndex: "history_description"
-            },
-            {
               title: "Date",
-              dataIndex: "history_date  "
+              dataIndex: "date"
             }
           ]}
         />

@@ -47,8 +47,7 @@
 }
 .dbRows {
   text-align: left;
-  border: solid;
-  width: 50%;
+  width: 100%;
 }
 
 .layout {

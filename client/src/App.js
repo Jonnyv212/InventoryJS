@@ -82,7 +82,7 @@ class App extends Component {
                 </Link>
               </Menu.Item>
 
-              <Menu.Item
+              {/* <Menu.Item
                 key="2"
                 onClick={() => {
                   return this.setState({
@@ -94,7 +94,7 @@ class App extends Component {
                   <Icon type="video-camera" />
                   <span>Barcode Scan</span>
                 </Link>
-              </Menu.Item>
+              </Menu.Item> */}
               <Menu.Item
                 key="3"
                 onClick={() => {

@@ -10,41 +10,27 @@ const { Content } = Layout;
 class ProjectsContent extends Component {
   state = {
     data: [],
-
-    columns: [
-      {
-        title: "Name",
-        dataIndex: "name"
-      }
-    ],
-
-    data2: [
-      {
-        key: "1",
-        name: "John Brown",
-        age: 32,
-        address: "New York No. 1 Lake Park"
-      }
-    ]
+    loadingEnabled: true
   };
 
   componentDidMount() {
     setTimeout(() => {
       axios.get("/api/getProjects/").then(response => {
-        this.setState({ data: response.data });
+        this.setState({
+          data: response.data,
+          loadingEnabled: false
+        });
       });
     }, 500);
   }
 
   spinner = () => {
     return (
-      <Spin tip="Loading..." size={"large"}>
-        <Alert
-          message="Alert message title"
-          description="Further details about the context of this alert."
-          type="info"
-        />
-      </Spin>
+      <Spin
+        style={{ fontSize: 32, position: "fixed", top: "50%", left: "50%" }}
+        tip="Loading..."
+        size={"large"}
+      />
     );
   };
 

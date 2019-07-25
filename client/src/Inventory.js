@@ -18,7 +18,7 @@ class InventoryContent extends Component {
   };
 
   //Initial function called.
-  componentDidMount(data) {
+  componentDidMount() {
     setTimeout(() => {
       this.getFullInventory();
     }, 1000);
