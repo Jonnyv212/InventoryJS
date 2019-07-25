@@ -6,13 +6,13 @@ const path = require("path");
 const port = process.env.PORT || 5000;
 const { Client } = require("pg");
 const connection = new Client({
-  connectionString:
-    "postgres://yieprnegsnhliq:9ec369ca2ab02384a49c4c8470d3fde44133bc2970f9004afb67d9ca47de2dea@ec2-50-16-225-96.compute-1.amazonaws.com:5432/dd9kl2kgp8frpt",
+  connectionString: process.env.HEROKU_POSTGRESQL_PUCE_URL,
   ssl: true
 });
 
 app.listen(port, () => {
   console.log("Listening to port: " + port);
+  console.log(process.env.HEROKU_POSTGRESQL_PUCE_URL);
 });
 
 // Serve static files from the React app
